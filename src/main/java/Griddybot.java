@@ -25,7 +25,7 @@ public class Griddybot {
                 createTodo(inputLine, listItems, line);
             } else if (inputLine.startsWith("deadline")) {
                 createDeadline(inputLine, listItems, line);
-            } else if  (inputLine.startsWith("event")) {
+            } else if (inputLine.startsWith("event")) {
                 createEvent(inputLine, listItems, line);
             } else {
                 switch (inputLine) {
@@ -38,22 +38,26 @@ public class Griddybot {
                     System.out.print(line);
                     break;
                 case "bye":
-                    System.out.println(line + "Bye. Come back soon!" + System.lineSeparator() + line);
+                    printBye(line);
                     isExit = true;
                     break;
                 default:
-                    Task t = new Task(inputLine);
-                    listItems.add(t);
-                    System.out.println(line + "added: " + t.description + System.lineSeparator() + line);
+                    createTask(inputLine, listItems, line);
                 }
             }
         }
     }
 
+    private static void createTask(String inputLine, ArrayList<Task> listItems, String line) {
+        Task t = new Task(inputLine);
+        listItems.add(t);
+        System.out.println(line + "added: " + t.description + System.lineSeparator() + line);
+    }
+
     private static void createEvent(String inputLine, ArrayList<Task> listItems, String line) {
         String description = inputLine.substring(6, inputLine.indexOf("/from"));
-        String from =  inputLine.substring(inputLine.indexOf("/from") + 6,  inputLine.indexOf("/to"));
-        String to =  inputLine.substring(inputLine.indexOf("/to") + 4);
+        String from = inputLine.substring(inputLine.indexOf("/from") + 6, inputLine.indexOf("/to"));
+        String to = inputLine.substring(inputLine.indexOf("/to") + 4);
         Event e = new Event(description, from, to);
         listItems.add(e);
 
@@ -62,7 +66,7 @@ public class Griddybot {
 
     private static void createDeadline(String inputLine, ArrayList<Task> listItems, String line) {
         String description = inputLine.substring(9, inputLine.indexOf("/by"));
-        String by =  inputLine.substring(inputLine.indexOf("/by") + 4);
+        String by = inputLine.substring(inputLine.indexOf("/by") + 4);
         Deadline d = new Deadline(description, by);
         listItems.add(d);
 
@@ -95,8 +99,12 @@ public class Griddybot {
         }
     }
 
-    private static void printWelcome(String line){
+    private static void printWelcome(String line) {
         System.out.println(line + "Hello! I'm Griddybot." + System.lineSeparator() + "What can I do for you?" + System.lineSeparator() + line);
+    }
+
+    private static void printBye(String line) {
+        System.out.println(line + "Bye. Come back soon!" + System.lineSeparator() + line);
     }
 
 }
