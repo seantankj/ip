@@ -4,17 +4,17 @@ import java.util.Scanner;
 public class Griddybot {
     public static void main(String[] args) {
 
-        String line = "_________________________________" + System.lineSeparator();
+        String line = "_____________________________________________________" + System.lineSeparator();
 
         printWelcome(line);
 
         boolean isExit = false;
         ArrayList<Task> listItems = new ArrayList<>();
         int listNumber = 0;
+        Scanner input = new Scanner(System.in);
 
         while (!isExit) {
             String inputLine;
-            Scanner input = new Scanner(System.in);
             inputLine = input.nextLine();
 
             if (inputLine.startsWith("mark")) {
@@ -61,7 +61,8 @@ public class Griddybot {
         Event e = new Event(description, from, to);
         listItems.add(e);
 
-        System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + e + System.lineSeparator() + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
+        System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + e + System.lineSeparator()
+                + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
 
     private static void createDeadline(String inputLine, ArrayList<Task> listItems, String line) {
@@ -70,13 +71,15 @@ public class Griddybot {
         Deadline d = new Deadline(description, by);
         listItems.add(d);
 
-        System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + d + System.lineSeparator() + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
+        System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + d + System.lineSeparator()
+                + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
 
     private static void createTodo(String inputLine, ArrayList<Task> listItems, String line) {
         ToDo td = new ToDo(inputLine.substring(5));
         listItems.add(td);
-        System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + td + System.lineSeparator() + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
+        System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + td + System.lineSeparator()
+                + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
 
     private static void unmark(String inputLine, ArrayList<Task> listItems, String line) {
@@ -85,7 +88,8 @@ public class Griddybot {
             System.out.println(line + "That task does not exist. Try again." + System.lineSeparator() + line);
         } else {
             listItems.get(taskNumber - 1).markAsUndone();
-            System.out.println(line + "I've marked this task as not done:" + System.lineSeparator() + listItems.get(taskNumber - 1) + System.lineSeparator() + line);
+            System.out.println(line + "I've marked this task as not done:" + System.lineSeparator() + listItems.get(taskNumber - 1)
+                    + System.lineSeparator() + line);
         }
     }
 
@@ -95,12 +99,20 @@ public class Griddybot {
             System.out.println(line + "That task does not exist. Try again." + System.lineSeparator() + line);
         } else {
             listItems.get(taskNumber - 1).markAsDone();
-            System.out.println(line + "I've marked this task as done:" + System.lineSeparator() + listItems.get(taskNumber - 1) + System.lineSeparator() + line);
+            System.out.println(line + "I've marked this task as done:" + System.lineSeparator() + listItems.get(taskNumber - 1)
+                    + System.lineSeparator() + line);
         }
     }
 
     private static void printWelcome(String line) {
-        System.out.println(line + "Hello! I'm Griddybot." + System.lineSeparator() + "What can I do for you?" + System.lineSeparator() + line);
+        System.out.println(line + "Hello! I'm" + System.lineSeparator() +
+                "   ____      _     _     _       _           _   " + System.lineSeparator() +
+                "  / ___|_ __(_) __| | __| |_   _| |__   ___ | |_ " + System.lineSeparator() +
+                " | |  _| '__| |/ _` |/ _` | | | | '_ \\ / _ \\| __|" + System.lineSeparator() +
+                " | |_| | |  | | (_| | (_| | |_| | |_) | (_) | |_ " + System.lineSeparator() +
+                "  \\____|_|  |_|\\__,_|\\__,_|\\__, |_.__/ \\___/ \\__|" + System.lineSeparator() +
+                "                           |___/                 " + System.lineSeparator() +
+                "What can I do for you?" + System.lineSeparator() + line);
     }
 
     private static void printBye(String line) {
