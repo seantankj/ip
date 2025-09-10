@@ -53,15 +53,27 @@ public class Griddybot {
     }
 
     private static void createEvent(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
-        String content = inputLine.substring(8);
+        String removeCommand = inputLine.substring(5);
 
-        if (content.isEmpty()) {
+        if (removeCommand.isEmpty()) {
             throw new GriddyException(GriddyException.emptyEvent);
+        } else if (!inputLine.contains("/from") || !inputLine.contains("/to")) {
+            throw new GriddyException(GriddyException.syntaxEvent);
         }
 
-        String description = inputLine.substring(6, inputLine.indexOf("/from"));
-        String from = inputLine.substring(inputLine.indexOf("/from") + 6, inputLine.indexOf("/to"));
-        String to = inputLine.substring(inputLine.indexOf("/to") + 4);
+        String[] firstSplit = removeCommand.split(" /from ");
+        if (firstSplit.length != 2) {
+            throw new GriddyException(GriddyException.syntaxEvent);
+        }
+
+        String[] secondSplit = firstSplit[1].split(" /to ");
+        if (secondSplit.length != 2) {
+            throw new GriddyException(GriddyException.syntaxEvent);
+        }
+
+        String description = firstSplit[0].trim();
+        String from = secondSplit[0].trim();
+        String to = secondSplit[1].trim();
         Event e = new Event(description, from, to);
         listItems.add(e);
 
@@ -70,14 +82,20 @@ public class Griddybot {
     }
 
     private static void createDeadline(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
-        String content = inputLine.substring(8);
-
-        if (content.isEmpty()) {
+        String removeCommand = inputLine.substring(8);
+        if (removeCommand.isEmpty()) {
             throw new GriddyException(GriddyException.emptyDeadline);
+        } else if (!inputLine.contains("/by")) {
+            throw new GriddyException(GriddyException.syntaxDeadline);
         }
 
-        String description = inputLine.substring(9, inputLine.indexOf("/by"));
-        String by = inputLine.substring(inputLine.indexOf("/by") + 4);
+        String[] firstSplit = removeCommand.split(" /by ");
+        if (firstSplit.length != 2) {
+            throw new GriddyException(GriddyException.syntaxDeadline);
+        }
+
+        String description = firstSplit[0].trim();
+        String by = firstSplit[1].trim();
         Deadline d = new Deadline(description, by);
         listItems.add(d);
 
@@ -87,9 +105,8 @@ public class Griddybot {
 
     private static void createTodo(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
         ToDo td = null;
-        String content = inputLine.substring(4);
-
-        if (content.isEmpty()) {
+        String removeCommand = inputLine.substring(4);
+        if (removeCommand.isEmpty()) {
             throw new GriddyException(GriddyException.emptyTodo);
         }
 
@@ -99,26 +116,48 @@ public class Griddybot {
                 + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
 
-    private static void unmark(String inputLine, ArrayList<Task> listItems, String line) {
-        int taskNumber = Integer.parseInt(inputLine.substring(7));
-        if (taskNumber > listItems.size()) {
-            System.out.println(line + "That task does not exist. Try again." + System.lineSeparator() + line);
-        } else {
-            listItems.get(taskNumber - 1).markAsUndone();
-            System.out.println(line + "I've marked this task as not done:" + System.lineSeparator() + listItems.get(taskNumber - 1)
-                    + System.lineSeparator() + line);
+    private static void unmark(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
+        String removeCommand = inputLine.substring(6);
+        if (removeCommand.isEmpty()) {
+            throw new GriddyException(GriddyException.emptyUnmark);
         }
+        int taskNumber = 0;
+        try {
+            taskNumber = Integer.parseInt(inputLine.substring(7));
+        } catch (NumberFormatException e) {
+            throw new GriddyException(GriddyException.syntaxUnmark);
+        }
+
+        if (taskNumber > listItems.size()) {
+            throw new GriddyException(GriddyException.numberOutOfRange);
+        }
+
+        listItems.get(taskNumber - 1).markAsUndone();
+        System.out.println(line + "I've marked this task as not done:" + System.lineSeparator() + listItems.get(taskNumber - 1)
+                + System.lineSeparator() + line);
+
     }
 
-    private static void mark(String inputLine, ArrayList<Task> listItems, String line) {
-        int taskNumber = Integer.parseInt(inputLine.substring(5));
-        if (taskNumber > listItems.size()) {
-            System.out.println(line + "That task does not exist. Try again." + System.lineSeparator() + line);
-        } else {
-            listItems.get(taskNumber - 1).markAsDone();
-            System.out.println(line + "I've marked this task as done:" + System.lineSeparator() + listItems.get(taskNumber - 1)
-                    + System.lineSeparator() + line);
+    private static void mark(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
+        String removeCommand = inputLine.substring(4);
+        if (removeCommand.isEmpty()) {
+            throw new GriddyException(GriddyException.emptyMark);
         }
+        int taskNumber = 0;
+        try {
+            taskNumber = Integer.parseInt(inputLine.substring(5));
+        } catch (NumberFormatException e) {
+            throw new GriddyException(GriddyException.syntaxMark);
+        }
+
+        if (taskNumber > listItems.size()) {
+            throw new GriddyException(GriddyException.numberOutOfRange);
+        }
+
+        listItems.get(taskNumber - 1).markAsDone();
+        System.out.println(line + "I've marked this task as done:" + System.lineSeparator() + listItems.get(taskNumber - 1)
+                + System.lineSeparator() + line);
+
     }
 
     private static void printWelcome(String line) {
