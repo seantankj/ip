@@ -106,12 +106,11 @@ public class Griddybot {
 
     private static void printWelcome(String line) {
         System.out.println(line + "Hello! I'm" + System.lineSeparator() +
-                "   ____      _     _     _       _           _   " + System.lineSeparator() +
-                "  / ___|_ __(_) __| | __| |_   _| |__   ___ | |_ " + System.lineSeparator() +
-                " | |  _| '__| |/ _` |/ _` | | | | '_ \\ / _ \\| __|" + System.lineSeparator() +
-                " | |_| | |  | | (_| | (_| | |_| | |_) | (_) | |_ " + System.lineSeparator() +
-                "  \\____|_|  |_|\\__,_|\\__,_|\\__, |_.__/ \\___/ \\__|" + System.lineSeparator() +
-                "                           |___/                 " + System.lineSeparator() +
+                "   ___     _    _    _      _         _" + System.lineSeparator() +
+                "  / __|_ _(_)__| |__| |_  _| |__  ___| |_" + System.lineSeparator() +
+                " | (_ | '_| / _` / _` | || | '_ \\/ _ \\  _|" + System.lineSeparator() +
+                "  \\___|_| |_\\__,_\\__,_|\\_, |_.__/\\___/\\__|" + System.lineSeparator() +
+                "                       |__/" + System.lineSeparator() +
                 "What can I do for you?" + System.lineSeparator() + line);
     }
 

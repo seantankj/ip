@@ -1,12 +1,8 @@
-test1
-mark 1
-unmark 1
 todo test2
 deadline test3 /by Sunday
 event test4 /from 2pm /to 4pm
 mark 2
 mark 3
-mark 4
 unmark 3
 list
 bye
