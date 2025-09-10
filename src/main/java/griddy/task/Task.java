@@ -1,3 +1,5 @@
+package griddy.task;
+
 public abstract class Task {
 
     protected String description;

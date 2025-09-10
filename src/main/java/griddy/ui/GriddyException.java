@@ -1,3 +1,5 @@
+package griddy.ui;
+
 public class GriddyException extends Exception {
 
     static String line = "_____________________________________________________" + System.lineSeparator();

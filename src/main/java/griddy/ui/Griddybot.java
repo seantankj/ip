@@ -1,3 +1,10 @@
+package griddy.ui;
+
+import griddy.task.Deadline;
+import griddy.task.Event;
+import griddy.task.Task;
+import griddy.task.ToDo;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
