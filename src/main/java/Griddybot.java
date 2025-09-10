@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Griddybot {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws GriddyException {
 
         String line = "_____________________________________________________" + System.lineSeparator();
 
@@ -17,44 +17,48 @@ public class Griddybot {
             String inputLine;
             inputLine = input.nextLine();
 
-            if (inputLine.startsWith("mark")) {
-                mark(inputLine, listItems, line);
-            } else if (inputLine.startsWith("unmark")) {
-                unmark(inputLine, listItems, line);
-            } else if (inputLine.startsWith("todo")) {
-                createTodo(inputLine, listItems, line);
-            } else if (inputLine.startsWith("deadline")) {
-                createDeadline(inputLine, listItems, line);
-            } else if (inputLine.startsWith("event")) {
-                createEvent(inputLine, listItems, line);
-            } else {
-                switch (inputLine) {
-                case "list":
-                    System.out.print(line);
-                    for (Task listItem : listItems) {
-                        listNumber++;
-                        System.out.print(listNumber + "." + listItem + System.lineSeparator());
+            try {
+                if (inputLine.startsWith("mark")) {
+                    mark(inputLine, listItems, line);
+                } else if (inputLine.startsWith("unmark")) {
+                    unmark(inputLine, listItems, line);
+                } else if (inputLine.startsWith("todo")) {
+                    createTodo(inputLine, listItems, line);
+                } else if (inputLine.startsWith("deadline")) {
+                    createDeadline(inputLine, listItems, line);
+                } else if (inputLine.startsWith("event")) {
+                    createEvent(inputLine, listItems, line);
+                } else {
+                    switch (inputLine) {
+                    case "list":
+                        System.out.print(line);
+                        for (Task listItem : listItems) {
+                            listNumber++;
+                            System.out.print(listNumber + "." + listItem + System.lineSeparator());
+                        }
+                        System.out.print(line);
+                        break;
+                    case "bye":
+                        printBye(line);
+                        isExit = true;
+                        break;
+                    default:
+                        throw new GriddyException(GriddyException.wrongKeyword);
                     }
-                    System.out.print(line);
-                    break;
-                case "bye":
-                    printBye(line);
-                    isExit = true;
-                    break;
-                default:
-                    createTask(inputLine, listItems, line);
                 }
+            } catch (GriddyException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
 
-    private static void createTask(String inputLine, ArrayList<Task> listItems, String line) {
-        Task t = new Task(inputLine);
-        listItems.add(t);
-        System.out.println(line + "added: " + t.description + System.lineSeparator() + line);
-    }
+    private static void createEvent(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
+        String content = inputLine.substring(8);
 
-    private static void createEvent(String inputLine, ArrayList<Task> listItems, String line) {
+        if (content.isEmpty()) {
+            throw new GriddyException(GriddyException.emptyEvent);
+        }
+
         String description = inputLine.substring(6, inputLine.indexOf("/from"));
         String from = inputLine.substring(inputLine.indexOf("/from") + 6, inputLine.indexOf("/to"));
         String to = inputLine.substring(inputLine.indexOf("/to") + 4);
@@ -65,7 +69,13 @@ public class Griddybot {
                 + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
 
-    private static void createDeadline(String inputLine, ArrayList<Task> listItems, String line) {
+    private static void createDeadline(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
+        String content = inputLine.substring(8);
+
+        if (content.isEmpty()) {
+            throw new GriddyException(GriddyException.emptyDeadline);
+        }
+
         String description = inputLine.substring(9, inputLine.indexOf("/by"));
         String by = inputLine.substring(inputLine.indexOf("/by") + 4);
         Deadline d = new Deadline(description, by);
@@ -75,8 +85,15 @@ public class Griddybot {
                 + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
 
-    private static void createTodo(String inputLine, ArrayList<Task> listItems, String line) {
-        ToDo td = new ToDo(inputLine.substring(5));
+    private static void createTodo(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
+        ToDo td = null;
+        String content = inputLine.substring(4);
+
+        if (content.isEmpty()) {
+            throw new GriddyException(GriddyException.emptyTodo);
+        }
+
+        td = new ToDo(inputLine.substring(5));
         listItems.add(td);
         System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + td + System.lineSeparator()
                 + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
