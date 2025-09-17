@@ -35,6 +35,8 @@ public class Griddybot {
                     createDeadline(inputLine, listItems, line);
                 } else if (inputLine.startsWith("event")) {
                     createEvent(inputLine, listItems, line);
+                } else if (inputLine.startsWith("delete")) {
+                    deleteTask(inputLine, listItems, line);
                 } else {
                     switch (inputLine) {
                     case "list":
@@ -57,6 +59,29 @@ public class Griddybot {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    private static void deleteTask(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {
+        String removeCommand = inputLine.substring(7);
+        if (removeCommand.isEmpty()) {
+            throw new GriddyException(GriddyException.emptyDelete);
+        }
+
+        int taskNumber = 0;
+        try {
+            taskNumber = Integer.parseInt(removeCommand);
+        } catch (NumberFormatException e) {
+            throw new GriddyException(GriddyException.syntaxDelete);
+        }
+
+        if (taskNumber > listItems.size()) {
+            throw new GriddyException(GriddyException.numberOutOfRange);
+        }
+
+        System.out.println(line + "I've deleted this task:" + System.lineSeparator() + listItems.get(taskNumber - 1) +
+                System.lineSeparator() + "Now you have " + (listItems.size() - 1) + " task(s) in the list." + System.lineSeparator() + line);
+
+        listItems.remove(taskNumber - 1);
     }
 
     private static void createEvent(String inputLine, ArrayList<Task> listItems, String line) throws GriddyException {

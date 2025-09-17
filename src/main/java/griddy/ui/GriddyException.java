@@ -26,4 +26,7 @@ public class GriddyException extends Exception {
     public static final String emptyEvent = line + "[ERROR] event cannot be empty" + System.lineSeparator() + line;
     public static final String syntaxEvent = line + "[ERROR] event syntax error, syntax should be:" + System.lineSeparator()
             + "event {name} /from {start} /to {end}" + System.lineSeparator() + line;
+    public static final String emptyDelete = line + "[ERROR] delete cannot be empty" + System.lineSeparator() + line;
+    public static final String syntaxDelete = line + "[ERROR] delete syntax error, syntax should be:" + System.lineSeparator()
+            + "delete {task number}" + System.lineSeparator() + line;
 }
