@@ -5,13 +5,22 @@ import griddy.task.Event;
 import griddy.task.Task;
 import griddy.task.ToDo;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 
 public class Griddybot {
     public static void main(String[] args) throws GriddyException {
 
         String line = "_____________________________________________________" + System.lineSeparator();
+        String file = "data/save.txt";
 
         printWelcome(line);
 
@@ -84,6 +93,12 @@ public class Griddybot {
         Event e = new Event(description, from, to);
         listItems.add(e);
 
+        try {
+            writeToFile("E [" + e.getStatusIcon() + "]" + removeCommand + System.lineSeparator());
+        } catch (IOException exception) {
+            System.out.println("Something went wrong: " + exception.getMessage());
+        }
+
         System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + e + System.lineSeparator()
                 + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
@@ -106,6 +121,12 @@ public class Griddybot {
         Deadline d = new Deadline(description, by);
         listItems.add(d);
 
+        try {
+            writeToFile("D [" + d.getStatusIcon() + "]" + removeCommand + System.lineSeparator());
+        } catch (IOException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
+        }
+
         System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + d + System.lineSeparator()
                 + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
@@ -119,6 +140,13 @@ public class Griddybot {
 
         td = new ToDo(inputLine.substring(5));
         listItems.add(td);
+
+        try {
+            writeToFile("T [" + td.getStatusIcon() + "]" + removeCommand + System.lineSeparator());
+        } catch (IOException e) {
+            System.out.println("Something went wrong: " + e.getMessage());
+        }
+
         System.out.println(line + "Got it. I've added this task:" + System.lineSeparator() + td + System.lineSeparator()
                 + "Now you have " + listItems.size() + " task(s) in the list." + System.lineSeparator() + line);
     }
@@ -181,4 +209,18 @@ public class Griddybot {
         System.out.println(line + "Bye. Come back soon!" + System.lineSeparator() + line);
     }
 
+    private static void writeToFile(String textToAdd) throws IOException {
+        FileWriter fw = new FileWriter("data/save.txt", true);
+        fw.write(textToAdd);
+        fw.close();
+    }
+
+    private static void printFileContents(String filePath) throws FileNotFoundException {
+        File f = new File(filePath);
+        Scanner s = new Scanner(f);
+        while (s.hasNext()) {
+            System.out.println(s.nextLine());
+        }
+    }
+    
 }
