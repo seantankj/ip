@@ -5,16 +5,15 @@ import griddy.task.Event;
 import griddy.task.Task;
 import griddy.task.ToDo;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 
 public class Griddybot {
     public static void main(String[] args) throws GriddyException {
@@ -26,8 +25,16 @@ public class Griddybot {
 
         boolean isExit = false;
         ArrayList<Task> listItems = new ArrayList<>();
-        int listNumber = 0;
         Scanner input = new Scanner(System.in);
+
+        try {
+            loadTasksFromFile(file, listItems);
+            if (!listItems.isEmpty()) {
+                System.out.println("Loaded " + listItems.size() + " task(s) from saved file.");
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No previous save file found. Starting fresh.");
+        }
 
         while (!isExit) {
             String inputLine;
@@ -47,6 +54,7 @@ public class Griddybot {
                 } else {
                     switch (inputLine) {
                     case "list":
+                        int listNumber = 0;
                         System.out.print(line);
                         for (Task listItem : listItems) {
                             listNumber++;
@@ -215,12 +223,108 @@ public class Griddybot {
         fw.close();
     }
 
+    public static void deleteLineByNumber(int lineNumber) {
+        try {
+            // Read all lines from the file
+            List<String> lines = Files.readAllLines(Paths.get("data/save.txt"));
+
+            // Check if line number is valid
+            if (lineNumber < 1 || lineNumber > lines.size()) {
+                System.out.println("Invalid line number");
+                return;
+            }
+
+            // Remove the line (convert to 0-based index)
+            lines.remove(lineNumber - 1);
+
+            // Write back to the file
+            Files.write(Paths.get("data/save.txt"), lines);
+
+            System.out.println("Line " + lineNumber + " deleted successfully");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void printFileContents(String filePath) throws FileNotFoundException {
         File f = new File(filePath);
         Scanner s = new Scanner(f);
         while (s.hasNext()) {
             System.out.println(s.nextLine());
         }
+    }
+
+    private static void loadTasksFromFile(String filePath, ArrayList<Task> listItems) throws FileNotFoundException {
+        File f = new File(filePath);
+        if (!f.exists()) {
+            return; // No file to load from
+        }
+
+        Scanner s = new Scanner(f);
+        while (s.hasNext()) {
+            String line = s.nextLine().trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+
+            try {
+                Task task = parseTaskFromLine(line);
+                if (task != null) {
+                    listItems.add(task);
+                }
+            } catch (Exception e) {
+                System.out.println("Error parsing line: " + line);
+            }
+        }
+        s.close();
+    }
+
+    private static Task parseTaskFromLine(String line) {
+        // Expected format: "T [ ] task description" or "T [X] task description"
+        if (line.length() < 6) return null;
+
+        char taskType = line.charAt(0);
+        boolean isDone = line.charAt(2) == 'X';
+        String taskContent = line.substring(6); // Skip "T [ ] " or "T [X] "
+
+        Task task = null;
+
+        switch (taskType) {
+        case 'T':
+            // Todo format: "T [ ] description"
+            task = new ToDo(taskContent);
+            break;
+
+        case 'D':
+            // Deadline format: "D [ ] description /by date"
+            if (taskContent.contains(" /by ")) {
+                String[] parts = taskContent.split(" /by ");
+                if (parts.length == 2) {
+                    task = new Deadline(parts[0].trim(), parts[1].trim());
+                }
+            }
+            break;
+
+        case 'E':
+            // Event format: "E [ ] description /from start /to end"
+            if (taskContent.contains(" /from ") && taskContent.contains(" /to ")) {
+                String[] firstSplit = taskContent.split(" /from ");
+                if (firstSplit.length == 2) {
+                    String[] secondSplit = firstSplit[1].split(" /to ");
+                    if (secondSplit.length == 2) {
+                        task = new Event(firstSplit[0].trim(), secondSplit[0].trim(), secondSplit[1].trim());
+                    }
+                }
+            }
+            break;
+        }
+
+        if (task != null && isDone) {
+            task.markAsDone();
+        }
+
+        return task;
     }
     
 }
