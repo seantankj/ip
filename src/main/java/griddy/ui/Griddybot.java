@@ -98,6 +98,8 @@ public class Griddybot {
         System.out.println(line + "I've deleted this task:" + System.lineSeparator() + listItems.get(taskNumber - 1) +
                 System.lineSeparator() + "Now you have " + (listItems.size() - 1) + " task(s) in the list." + System.lineSeparator() + line);
 
+        deleteLineByNumber(taskNumber);
+
         listItems.remove(taskNumber - 1);
     }
 
@@ -269,14 +271,6 @@ public class Griddybot {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static void printFileContents(String filePath) throws FileNotFoundException {
-        File f = new File(filePath);
-        Scanner s = new Scanner(f);
-        while (s.hasNext()) {
-            System.out.println(s.nextLine());
         }
     }
 
