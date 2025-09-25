@@ -1,0 +1,9 @@
+T [ ] task 1
+T [ ] task 2
+E [ ] task /from 1pm /to 2pm
+T [ ] task 1
+D [ ] task 2 /by today
+E [ ] task 3 /from now /to later
+T [ ] test1
+T [ ] task100
+D [ ] task5 /by today
