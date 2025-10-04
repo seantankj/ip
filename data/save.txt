@@ -1,8 +1,3 @@
 T [X] tasktodo
 D [ ] deadline /by monday
 E [ ] event1 /from monday /to friday
-D [ ] return book /by Dec 02 2019, 6:00pm
-E [ ] meeting /from Oct 04 2025, 2:00pm /to Oct 04 2025, 4:00pm
-D [ ] assignment /by next Friday
-D [ ] return book /by 2/12/2019 2800
-E [ ] workshop /from Dec 02 2019, 9:00am /to end of day
