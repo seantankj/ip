@@ -23,6 +23,8 @@ public class Parser {
             return new Command(CommandType.EVENT, trimmedInput);
         } else if (trimmedInput.startsWith("delete")) {
             return new Command(CommandType.DELETE, trimmedInput);
+        } else if (trimmedInput.startsWith("find ")) {
+                return new Command(CommandType.FIND, trimmedInput);
         } else if (trimmedInput.equals("list")) {
             return new Command(CommandType.LIST, trimmedInput);
         } else if (trimmedInput.equals("bye")) {
@@ -83,6 +85,13 @@ public class Parser {
         return new Event(description, from, to);
     }
 
+    public static String parseSearchKeyword(String inputLine) throws GriddyException {
+        if (inputLine.length() <= 5) { // "find " is 5 characters
+            throw new GriddyException("Search keyword cannot be empty");
+        }
+        return inputLine.substring(5).trim(); // Remove "find " and get keyword
+    }
+
     public static int parseTaskNumber(String inputLine, int commandLength) throws GriddyException {
         String numberStr = inputLine.substring(commandLength).trim();
         if (numberStr.isEmpty()) {
@@ -97,7 +106,7 @@ public class Parser {
     }
 
     public enum CommandType {
-        MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, LIST, BYE
+        MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, LIST, BYE
     }
 
     public static class Command {

@@ -59,4 +59,19 @@ public class Ui {
             System.out.println("No previous save file found. Starting fresh.");
         }
     }
+
+    public void printSearchResults(ArrayList<Task> matchingTasks, String keyword) {
+        System.out.print(line);
+        if (matchingTasks.isEmpty()) {
+            System.out.println("No matching tasks found for keyword: " + keyword);
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            int displayIndex = 1;
+            for (Task task : matchingTasks) {
+                System.out.println(displayIndex + "." + task);
+                displayIndex++;
+            }
+        }
+        System.out.print(line);
+    }
 }
