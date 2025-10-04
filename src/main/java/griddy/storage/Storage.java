@@ -113,7 +113,7 @@ public class Storage {
         if (line.length() < 6) return null;
 
         char taskType = line.charAt(0);
-        boolean isDone = line.charAt(2) == 'X';
+        boolean isDone = line.charAt(3) == 'X';
         String taskContent = line.substring(6);
 
         Task task = null;
@@ -148,5 +148,14 @@ public class Storage {
         }
 
         return task;
+    }
+    // NEW METHOD: Save all tasks (overwrites file)
+    public void saveAllTasks(ArrayList<Task> tasks) throws IOException {
+        FileWriter fw = new FileWriter(filePath, false); // false = overwrite
+        for (Task task : tasks) {
+            String taskData = formatTaskForSaving(task);
+            fw.write(taskData + System.lineSeparator());
+        }
+        fw.close();
     }
 }

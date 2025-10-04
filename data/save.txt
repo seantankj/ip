@@ -1,3 +1,3 @@
-T [ ] tasktodo
+T [X] tasktodo
 D [ ] deadline /by monday
 E [ ] event1 /from monday /to friday
