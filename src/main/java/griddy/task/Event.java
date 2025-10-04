@@ -122,4 +122,5 @@ public class Event extends Task {
         return "[E][" + getStatusIcon() + "] " + description + " (from: " + getFromFormatted() +
                 " to: " + getToFormatted() + ")";
     }
+
 }
