@@ -53,4 +53,20 @@ public class TaskList {
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
+
+    public ArrayList<Task> findTasks(String keyword) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase();
+
+        for (Task task : tasks) {
+            String taskString = task.toString().toLowerCase();
+
+            if (taskString.contains(lowerKeyword)) {
+                matchingTasks.add(task);
+            }
+        }
+
+        return matchingTasks;
+    }
+
 }

@@ -73,6 +73,9 @@ public class Griddybot {
         case DELETE:
             handleDeleteCommand(fullCommand);
             break;
+        case FIND:
+            handleFindCommand(fullCommand);
+            break;
         case LIST:
             handleListCommand();
             break;
@@ -176,6 +179,16 @@ public class Griddybot {
             ui.printTaskDeleted(taskToDelete, taskList.size());
         } catch (IndexOutOfBoundsException e) {
             throw new GriddyException(GriddyException.numberOutOfRange);
+        }
+    }
+
+    private void handleFindCommand(String inputLine) throws GriddyException {
+        try {
+            String keyword = Parser.parseSearchKeyword(inputLine);
+            ArrayList<Task> matchingTasks = taskList.findTasks(keyword);
+            ui.printSearchResults(matchingTasks, keyword);
+        } catch (GriddyException e) {
+            ui.printError(e.getMessage());
         }
     }
 
