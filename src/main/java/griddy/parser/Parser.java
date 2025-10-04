@@ -6,8 +6,18 @@ import griddy.task.Deadline;
 import griddy.task.Event;
 import griddy.ui.GriddyException;
 
+/**
+ * Pareses user input commands into their respective functions.
+ */
 public class Parser {
-
+    /**
+     * Initialises the user command to create a new entry of matching class.
+     * If none of the commands match, a custom error message is displayed.
+     *
+     * @param inputLine Input line of the user command.
+     * @return New entry of matching class.
+     * @throws GriddyException If none of the commands match.
+     */
     public static Command parseCommand(String inputLine) throws GriddyException {
         String trimmedInput = inputLine.trim();
 
@@ -34,6 +44,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Creates a To Do task.
+     * If the description is empty, a custom error message is displayed.
+     *
+     * @param inputLine Input line of the user command.
+     * @return New entry of Todo Class.
+     * @throws GriddyException If description is empty.
+     */
     public static Task createTodoTask(String inputLine) throws GriddyException {
         String removeCommand = inputLine.substring(4).trim();
         if (removeCommand.isEmpty()) {
@@ -42,6 +60,14 @@ public class Parser {
         return new ToDo(removeCommand);
     }
 
+    /**
+     * Creates a Deadline task.
+     * If the description is empty or no due date, a custom error message is displayed.
+     *
+     * @param inputLine Input line of the user command.
+     * @return New entry of Deadline Class.
+     * @throws GriddyException If description is empty or no due date.
+     */
     public static Task createDeadlineTask(String inputLine) throws GriddyException {
         String removeCommand = inputLine.substring(8).trim();
         if (removeCommand.isEmpty()) {
@@ -60,6 +86,14 @@ public class Parser {
         return new Deadline(description, by);
     }
 
+    /**
+     * Creates a Event task.
+     * If the description is empty or no start or end date, a custom error message is displayed.
+     *
+     * @param inputLine Input line of the user command.
+     * @return New entry of Event Class.
+     * @throws GriddyException If description is empty or no start or end date.
+     */
     public static Task createEventTask(String inputLine) throws GriddyException {
         String removeCommand = inputLine.substring(5).trim();
 
@@ -85,6 +119,14 @@ public class Parser {
         return new Event(description, from, to);
     }
 
+    /**
+     * Parses the search keyword for Find function.
+     * If the search keyword is empty, a custom error message is displayed.
+     *
+     * @param inputLine Input line of the user command.
+     * @return Search keyword in String form.
+     * @throws GriddyException If search keyword is empty.
+     */
     public static String parseSearchKeyword(String inputLine) throws GriddyException {
         if (inputLine.length() <= 5) { // "find " is 5 characters
             throw new GriddyException("Search keyword cannot be empty");
@@ -92,6 +134,15 @@ public class Parser {
         return inputLine.substring(5).trim(); // Remove "find " and get keyword
     }
 
+    /**
+     * Parses the task number for various functions.
+     * If the task number is empty or of an invalid type, a custom error message is displayed.
+     *
+     * @param inputLine Input line of the user command.
+     * @param commandLength Length of input line.
+     * @return Task number in int form.
+     * @throws GriddyException If task number is empty or invalid type.
+     */
     public static int parseTaskNumber(String inputLine, int commandLength) throws GriddyException {
         String numberStr = inputLine.substring(commandLength).trim();
         if (numberStr.isEmpty()) {
@@ -109,6 +160,9 @@ public class Parser {
         MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, LIST, BYE
     }
 
+    /**
+     * Represents a command type and its full description
+     */
     public static class Command {
         private CommandType type;
         private String fullCommand;
