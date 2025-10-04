@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Stores the file path for save file and relevant storage functions such as load, delete,
+ * add, mark and unmark.
+ */
 public class Storage {
     private String filePath;
 
@@ -21,6 +25,12 @@ public class Storage {
         this.filePath = filePath;
     }
 
+    /**
+     * Saves task to external save file by appending it.
+     *
+     * @param task Task to save to file.
+     * @throws IOException If there is an error writing to the file.
+     */
     public void saveTask(Task task) throws IOException {
         String taskData = formatTaskForSaving(task);
         FileWriter fw = new FileWriter(filePath, true);
@@ -28,6 +38,11 @@ public class Storage {
         fw.close();
     }
 
+    /**
+     * Loads the tasks from the external save file.
+     *
+     * @throws FileNotFoundException If there is no save file found.
+     */
     public ArrayList<Task> loadTasks() throws FileNotFoundException {
         ArrayList<Task> tasks = new ArrayList<>();
         File f = new File(filePath);
@@ -55,6 +70,11 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Deletes a task from the external save file.
+     *
+     * @param taskNumber Index number of task to be deleted.
+     */
     public void deleteTaskFromFile(int taskNumber) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath));
@@ -72,18 +92,22 @@ public class Storage {
         }
     }
 
+    /**
+     * Formats the task in a fixed format before saving.
+     *
+     * @param task Task to be formatted.
+     */
     private String formatTaskForSaving(Task task) {
         String taskType = "";
         String taskContent = "";
 
         if (task instanceof ToDo) {
             taskType = "T";
-            taskContent = task.toString().substring(7); // Remove "[T]" prefix
+            taskContent = task.toString().substring(7);
         } else if (task instanceof Deadline) {
             taskType = "D";
             String taskStr = task.toString();
-            String content = taskStr.substring(7); // Remove "[D][ ]" or "[D][X]"
-            // Convert "(by: date)" back to " /by date" format
+            String content = taskStr.substring(7);
             if (content.contains(" (by: ")) {
                 String desc = content.substring(0, content.indexOf(" (by: "));
                 String byPart = content.substring(content.indexOf(" (by: ") + 6, content.length() - 1);
@@ -94,8 +118,7 @@ public class Storage {
         } else if (task instanceof Event) {
             taskType = "E";
             String taskStr = task.toString();
-            String content = taskStr.substring(7); // Remove "[E][ ]" or "[E][X]"
-            // Convert "(from: start to: end)" back to " /from start /to end" format
+            String content = taskStr.substring(7);
             if (content.contains(" (from: ") && content.contains(" to: ")) {
                 String desc = content.substring(0, content.indexOf(" (from: "));
                 String fromPart = content.substring(content.indexOf(" (from: ") + 8, content.indexOf(" to: "));
@@ -149,7 +172,12 @@ public class Storage {
 
         return task;
     }
-    // NEW METHOD: Save all tasks (overwrites file)
+
+    /**
+     * Alternative save method that overrides the entire file, used for mark and unmark.
+     *
+     * @param tasks List of tasks to override the save file with.
+     */
     public void saveAllTasks(ArrayList<Task> tasks) throws IOException {
         FileWriter fw = new FileWriter(filePath, false); // false = overwrite
         for (Task task : tasks) {

@@ -31,6 +31,12 @@ public class Griddybot {
         bot.run();
     }
 
+    /**
+     * Starts the chatbot sequence and reads in the user command.
+     * If the command is invalid, a custom error message is shown.
+     *
+     * @throws GriddyException If command is unknown.
+     */
     public void run() throws GriddyException {
         ui.printWelcome();
         loadTasksFromStorage();
@@ -95,7 +101,6 @@ public class Griddybot {
             taskList.markTask(taskNumber - 1);
             Task task = taskList.getTask(taskNumber - 1);
 
-            // Save all tasks to file (overwrites the entire file)
             try {
                 storage.saveAllTasks(taskList.getAllTasks());
             } catch (IOException e) {
@@ -215,6 +220,4 @@ public class Griddybot {
             throw new GriddyException(GriddyException.numberOutOfRange);
         }
     }
-
-
 }
