@@ -1,8 +1,11 @@
-todo test2
-deadline test3 /by Sunday
-event test4 /from 2pm /to 4pm
+todo test1
+deadline test2 /by Sunday
+event test3 /from Monday /to Friday
 mark 2
 mark 3
-unmark 3
 list
+unmark 3
+delete 1
+list
+find test
 bye

@@ -23,6 +23,23 @@ public class Storage {
 
     public Storage(String filePath) {
         this.filePath = filePath;
+        createDirectoriesIfNeeded();
+    }
+
+    private void createDirectoriesIfNeeded() {
+        try {
+            File file = new File(filePath);
+            File parentDir = file.getParentFile();
+
+            if (parentDir != null && !parentDir.exists()) {
+                boolean created = parentDir.mkdirs();
+                if (created) {
+                    System.out.println("Created directory: " + parentDir.getPath());
+                }
+            }
+        } catch (SecurityException e) {
+            System.out.println("Warning: Could not create directories for " + filePath);
+        }
     }
 
     /**
